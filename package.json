@@ -1,0 +1,26 @@
+{
+  "name": "moepics-scripts",
+  "version": "0.0.1",
+  "description": "Useful scripts for managing moepictures",
+  "main": "dist/run.js",
+  "types": "dist/run.d.ts",
+  "scripts": {
+    "start": "tsc && node dist/run.js",
+    "clean": "del-cli ./dist"
+  },
+  "author": "Moebytes",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.7.2",
+    "del-cli": "^7.0.0",
+    "dotenv": "^17.2.3",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "moepics-api": "github:Moestash/moepics-api",
+    "pixiv.ts": "^0.8.6",
+    "sharp": "^0.34.4",
+    "sharp-phash": "^2.2.0"
+  }
+}
