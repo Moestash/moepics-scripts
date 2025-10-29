@@ -4,7 +4,7 @@
   </p>
 </div>
 
-Collection of useful personal scripts for managing moepictures.net. Usually for bulk actions to update data on 
+Collection of useful personal scripts for managing [moepictures](https://moepictures.net/). Usually for bulk actions to update data on 
 multiple posts, etc.
 
 ©2025 Moepictures
