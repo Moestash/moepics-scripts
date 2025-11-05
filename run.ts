@@ -1,8 +1,8 @@
 import "dotenv/config"
-import updateDirectLinks from "./scripts/1 - Update direct links"
+import fixMultipleCharacters from "./scripts/3 - Fix multiple characters"
 
 const start = async () => {
-    updateDirectLinks()
+    fixMultipleCharacters()
 }
 
 start()

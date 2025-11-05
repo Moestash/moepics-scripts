@@ -67,4 +67,28 @@ const updateDirectLinks = async () => {
     }
 }
 
+export const updateOtherDirectLinks = async () => {
+    const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
+
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+  
+    let i = 0
+    let skip = 0
+    for (const post of posts) {
+        i++
+        if (i < skip) continue
+        if (post.images.length > 1) continue
+        if (post.images[0].directLink) continue
+        console.log(i)
+        if (post.mirrors?.danbooru) {
+            let id = post.mirrors.danbooru.match(/\d+/)?.[0] ?? ""
+            const json = await fetch(`https://danbooru.donmai.us/posts/${id}.json`).then((r) => r.json())
+            if (json.source?.includes("pximg.net") || json.source?.includes("pbs.twimg")) {
+                let image = post.images[0]
+                await moepics.images.update(image.imageID, "directLink", json.source)
+            }
+        }
+    }
+}
+
 export default updateDirectLinks
