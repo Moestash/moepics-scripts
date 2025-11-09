@@ -1,8 +1,8 @@
 import "dotenv/config"
-import fixMultipleCharacters from "./scripts/3 - Fix multiple characters"
+import rateImages from "./scripts/4 - Rate images"
 
 const start = async () => {
-    fixMultipleCharacters()
+    rateImages()
 }
 
 start()
