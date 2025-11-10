@@ -1,8 +1,8 @@
 import "dotenv/config"
-import cleanArtistTags from "./scripts/8 - Clean artist tags"
+import updateTwitterMirrors from "./scripts/9 - Update twitter mirrors"
 
 const start = async () => {
-    cleanArtistTags()
+    updateTwitterMirrors()
 }
 
 start()

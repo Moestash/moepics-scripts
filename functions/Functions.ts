@@ -1,6 +1,7 @@
 import Moepictures from "moepics-api"
 import axios from "axios"
 import phash from "sharp-phash"
+import dist from "sharp-phash/distance"
 import sharp from "sharp"
 import wanakana from "wanakana"
 import pinyin from "pinyin"
@@ -111,5 +112,20 @@ export default class Functions {
     public static cleanTag = (tag: string) => {
         return tag.normalize("NFD").replace(/[^a-z0-9_\-():><&!#@?]/gi, "")
         .replaceAll("_", "-").replace(/-+/g, "-").replace(/^-+|-+$/g, "")
+    }
+
+    public static imagesMatch = async (first: string, second: string) => {
+        try {
+            const oldBuffer = await fetch(first).then((r) => r.arrayBuffer())
+            const oldHash = await phash(Buffer.from(oldBuffer)).then((hash) => this.binaryToHex(hash))
+            const buffer = await fetch(second).then((r) => r.arrayBuffer())
+            const hash = await phash(Buffer.from(buffer)).then((hash) => this.binaryToHex(hash))
+            if (dist(hash, oldHash) < 10) {
+                return true
+            }
+            return false
+        } catch {
+            return false
+        }
     }
 }
