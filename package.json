@@ -18,9 +18,12 @@
   },
   "dependencies": {
     "axios": "^1.12.2",
+    "hangul-romanization": "^1.0.1",
     "moepics-api": "github:Moestash/moepics-api",
+    "pinyin": "^4.0.0",
     "pixiv.ts": "^0.8.6",
     "sharp": "^0.34.4",
-    "sharp-phash": "^2.2.0"
+    "sharp-phash": "^2.2.0",
+    "wanakana": "^5.3.1"
   }
 }

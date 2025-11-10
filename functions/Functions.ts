@@ -2,6 +2,9 @@ import Moepictures from "moepics-api"
 import axios from "axios"
 import phash from "sharp-phash"
 import sharp from "sharp"
+import wanakana from "wanakana"
+import pinyin from "pinyin"
+import * as hangul from "hangul-romanization"
 
 const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
@@ -64,5 +67,49 @@ export default class Functions {
 
     public static fixTwitterTag = (tag: string) => {
         return tag.toLowerCase().replaceAll("_", "-").replace(/^[-]+/, "").replace(/[-]+$/, "")
+    }
+
+    public static detectCJK = (text: string) => {
+        const result = {
+            chinese: false,
+            japanese: false,
+            korean: false,
+            diacritics: false
+        }
+    
+        const chineseRegex = /[\u4E00-\u9FFF]/
+        const japaneseRegex = /[\u3040-\u309F\u30A0-\u30FF\u31F0-\u31FF\u4E00-\u9FFF]/
+        const koreanRegex = /[\uAC00-\uD7AF\u1100-\u11FF]/
+        const diacriticsRegex = /[\u00C0-\u017F\u1E00-\u1EFF\u0300-\u036F]/
+    
+        if (chineseRegex.test(text)) result.chinese = true
+        if (japaneseRegex.test(text)) result.japanese = true
+        if (koreanRegex.test(text)) result.korean = true
+        if (diacriticsRegex.test(text.normalize("NFD"))) result.diacritics = true
+    
+        return result
+    }
+
+    public static romanizeTag = (tag: string, attributes: {chinese: boolean, japanese: boolean, korean: boolean}) => {
+        let text = tag
+        if (attributes.japanese) {
+            text = wanakana.toRomaji(text)
+        }
+        if (attributes.chinese) {
+            text = pinyin(text, {style: pinyin.STYLE_NORMAL}).flat().join("-")
+        }
+        if (attributes.korean) {
+            text = hangul.convert(text)
+        }
+        return this.cleanTag(this.removeDiacritics(text))
+    }
+
+    public static removeDiacritics = (text: string) => {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    }
+
+    public static cleanTag = (tag: string) => {
+        return tag.normalize("NFD").replace(/[^a-z0-9_\-():><&!#@?]/gi, "")
+        .replaceAll("_", "-").replace(/-+/g, "-").replace(/^-+|-+$/g, "")
     }
 }
