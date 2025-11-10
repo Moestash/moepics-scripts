@@ -1,8 +1,8 @@
 import "dotenv/config"
-import rateImages from "./scripts/4 - Rate images"
+import mergeDuplicateArtists from "./scripts/5 - Merge duplicate artists"
 
 const start = async () => {
-    rateImages()
+    mergeDuplicateArtists()
 }
 
 start()

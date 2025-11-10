@@ -1,6 +1,7 @@
 import Moepictures from "moepics-api"
 import axios from "axios"
 import phash from "sharp-phash"
+import sharp from "sharp"
 
 const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
@@ -46,5 +47,22 @@ export default class Functions {
             }
         }
         return ""
+    }
+
+    public static cropToSquare = async (image: ArrayBuffer) => {
+        const metadata = await sharp(Buffer.from(image)).metadata()
+        const side = Math.min(metadata.width, metadata.height)
+        const left = Math.floor((metadata.width - side) / 2)
+        const top = Math.floor((metadata.height - side) / 2)
+    
+        const buffer = await sharp(Buffer.from(image))
+            .extract({left, top, width: side, height: side})
+            .toBuffer()
+    
+        return Object.values(new Uint8Array(buffer))
+    }
+
+    public static fixTwitterTag = (tag: string) => {
+        return tag.toLowerCase().replaceAll("_", "-").replace(/^[-]+/, "").replace(/[-]+$/, "")
     }
 }
