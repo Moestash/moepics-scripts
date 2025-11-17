@@ -10,6 +10,10 @@ import * as hangul from "hangul-romanization"
 const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
 export default class Functions {
+    public static timeout = (ms: number) => {
+        return new Promise((resolve) => setTimeout(resolve, ms))
+    }
+    
     public static removeDuplicates = <T>(array: T[]) => {
         const set = new Set<string>()
         return array.filter(item => {

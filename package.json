@@ -22,7 +22,7 @@
     "hangul-romanization": "^1.0.1",
     "moepics-api": "github:Moestash/moepics-api",
     "pinyin": "^4.0.0",
-    "pixiv.ts": "^0.8.6",
+    "pixiv.ts": "^0.8.7",
     "puppeteer-real-browser": "^1.4.4",
     "sharp": "^0.34.4",
     "sharp-phash": "^2.2.0",

@@ -1,8 +1,8 @@
 import "dotenv/config"
-import updateTwitterMirrors from "./scripts/9 - Update twitter mirrors"
+import removeDefaultPfp from "./scripts/13 - Remove default pixiv pfp"
 
 const start = async () => {
-    updateTwitterMirrors()
+    removeDefaultPfp()
 }
 
 start()

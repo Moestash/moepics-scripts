@@ -34,11 +34,11 @@ const parseTwitterLink = async (html: string, originalLink: string) => {
 export const updateTwitterMirrors = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
-    const posts = await moepics.search.posts({query: "", type: "image", rating: "all", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
 
     const {page, browser} = await connect({headless: false, turnstile: true})
     let first = true
-    let skip = 0
+    let skip = 51271
 
     for (const post of posts) {
         if (Number(post.postID) < skip) continue
