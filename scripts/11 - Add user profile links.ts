@@ -22,7 +22,6 @@ const addUserProfileLinks = async () => {
                 illust = await pixiv.illust.get(id)
             } catch (e: any) {
                 if (String(e)?.includes("access_token")) return console.log("429")
-                await moepics.posts.addTags(post.postID, ["bad-pixiv-id"])
                 continue
             }
             let userLink = `https://www.pixiv.net/users/${illust.user.id}`

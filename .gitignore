@@ -4,3 +4,4 @@ dist
 .env
 model
 dump
+conflicts.json

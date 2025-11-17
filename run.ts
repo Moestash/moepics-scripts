@@ -1,5 +1,5 @@
 import "dotenv/config"
-import removeDefaultPfp from "./scripts/13 - Remove default pixiv pfp"
+import removeDefaultPfp from "./scripts/15 - Find artist conflicts"
 
 const start = async () => {
     removeDefaultPfp()
