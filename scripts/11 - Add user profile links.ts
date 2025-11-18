@@ -12,7 +12,6 @@ const addUserProfileLinks = async () => {
     for (const post of posts) {
         i++
         if (i < skip) continue
-        // @ts-ignore
         if (post.userProfile) continue
         console.log(i)
         if (post.source?.includes("pixiv.net")) {
@@ -25,12 +24,9 @@ const addUserProfileLinks = async () => {
                 continue
             }
             let userLink = `https://www.pixiv.net/users/${illust.user.id}`
-            // @ts-ignore
             await moepics.posts.update(post.postID, "userProfile", userLink)
-            // @ts-ignore
             await moepics.posts.update(post.postID, "drawingTools", illust.tools)
             await moepics.posts.update(post.postID, "bookmarks", illust.total_bookmarks)
-            // @ts-ignore
             await moepics.posts.update(post.postID, "sourceImageCount", illust.page_count)
         }
     }

@@ -17,7 +17,6 @@ const findArtistConflicts = async () => {
         i++
         if (i < skip) continue
         const posts = await moepics.search.posts({query: tag.tag, type: "all", rating: "all+h", style: "all+s", sort: "reverse date", limit: 999999})
-        // @ts-ignore
         let uniqueUsers = functions.removeDuplicates(posts.filter((p) => p.userProfile).map((p) => p.userProfile)) as string[]
 
         if (uniqueUsers.length > 1) {
@@ -33,21 +32,16 @@ const findArtistConflicts = async () => {
 const getConflictInfo = async (pixiv: Pixiv, posts: PostSearch[]) => {
     let info = {} as any
     for (const post of posts) {
-        // @ts-ignore
         if (!post.userProfile) continue
-        // @ts-ignore
         if (!info[post.userProfile]) {
-            // @ts-ignore
-            const detail = await pixiv.user.webDetail(post.userProfile.match(/\d+/)[0])
+            const detail = await pixiv.user.webDetail(Number(post.userProfile?.match(/\d+/)?.[0]))
             const twitter = detail.social.twitter?.url?.trim().match(/(?<=com\/).*?(?=\?|$)/)?.[0]
             let tag = twitter ? functions.fixTwitterTag(twitter) : functions.romanizeTag(detail.name, functions.detectCJK(detail.name))
-            // @ts-ignore
             info[post.userProfile] = {
                 tag,
                 posts: [post.postID]
             }
         } else {
-            // @ts-ignore
             info[post.userProfile].posts.push(post.postID)
         }
     }
@@ -81,10 +75,9 @@ const fixArtistConflicts = async () => {
         if (tag === "unknown-artist") continue
 
         const posts = await moepics.search.posts({query: tag, type: "all", rating: "all+h", style: "all+s", sort: "reverse date", limit: 999999})
-        // @ts-ignore
         let uniqueUsers = functions.removeDuplicates(posts.filter((p) => p.userProfile).map((p) => p.userProfile)) as string[]
         if (uniqueUsers.length <= 1) continue
-        
+
         const info = await getConflictInfo(pixiv, posts)
 
         for (const item of info) {

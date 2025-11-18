@@ -10,7 +10,6 @@ const addArtToolTags = async () => {
     for (const post of posts) {
         i++
         if (i < skip) continue
-        // @ts-ignore
         let drawingTools = post.drawingTools as string[]
         if (drawingTools?.length) {
             let ignored = ["ミリペン", "コピック", "筆", "シャープペンシル", "鉛筆", "エアブラシ", "サインペン",
