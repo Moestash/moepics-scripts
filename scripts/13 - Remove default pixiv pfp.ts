@@ -13,9 +13,10 @@ const removeDefaultPfp = async () => {
     const baseHash = await functions.pHash(baseBuffer)
 
     let i = 0
+    let skip = 15172
     for (const tag of tags) {
         i++
-        if (i < 15172) continue
+        if (i < skip) continue
         if (tag.image) {
             console.log(i)
             const tagLink = moepics.links.getTagLink(tag.type, tag.image)

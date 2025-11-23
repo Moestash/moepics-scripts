@@ -1,5 +1,5 @@
 import "dotenv/config"
-import removeDefaultPfp from "./scripts/16 - Fix bad pixiv id"
+import removeDefaultPfp from "./scripts/17 - Retag bad posts"
 
 const start = async () => {
     removeDefaultPfp()
