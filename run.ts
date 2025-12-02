@@ -1,8 +1,8 @@
 import "dotenv/config"
-import removeDefaultPfp from "./scripts/17 - Retag bad posts"
+import runScript from "./scripts/21 - Fix unknown characters"
 
 const start = async () => {
-    removeDefaultPfp()
+    runScript()
 }
 
 start()

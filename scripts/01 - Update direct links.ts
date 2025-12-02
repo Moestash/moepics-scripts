@@ -40,11 +40,11 @@ const updateDirectLinks = async () => {
     const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
   
     let i = 0
-    let skip = 0
+    let skip = 48504
     for (const post of posts) {
         i++
         if (i < skip) continue
-        if (post.pixivTags) continue
+        if (post.images[0]?.directLink) continue
         console.log(i)
         if (post.source?.includes("pixiv.net")) {
             const id = post.source.match(/\d+/)?.[0] ?? ""
@@ -56,10 +56,7 @@ const updateDirectLinks = async () => {
                 continue
             }
             const sourceLinks = await getSourceLinks(illust)
-            const pixivTags = illust.tags.map((t) => t.name)
-            await moepics.posts.update(post.postID, "pixivTags", pixivTags)
             for (const image of post.images) {
-                if (image.directLink) continue
                 const directLink = resolveSourceLink(image.hash, image.order, sourceLinks)
                 await moepics.images.update(image.imageID, "directLink", directLink)
             }

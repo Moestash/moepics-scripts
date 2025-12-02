@@ -9,10 +9,10 @@ const retagBadPosts = async () => {
     console.log(posts.length)
   
     let i = 0
-    let skip = 0
+    let skip = 17534
     for (const post of posts) {
         i++
-        if (i < skip) continue
+        if (Number(post.postID) < skip) continue
         console.log(`${i} -> ${post.postID}`)
         let image = post.images[0]
         let imageLink = moepics.links.getImageLink(post.images[0], false)

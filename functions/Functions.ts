@@ -114,7 +114,7 @@ export default class Functions {
     }
 
     public static cleanTag = (tag: string) => {
-        return tag.normalize("NFD").replace(/[^a-z0-9_\-():><&!#@?]/gi, "")
+        return tag.toLowerCase().normalize("NFD").replace(/[^a-z0-9_\-():><&!#@?]/gi, "")
         .replaceAll("_", "-").replace(/-+/g, "-").replace(/^-+|-+$/g, "")
     }
 
@@ -131,5 +131,36 @@ export default class Functions {
         } catch {
             return false
         }
+    }
+
+    public static safeNumber = (text: string) => {
+        if (Number.isNaN(Number(text))) return null
+        return Number(text)
+    }
+
+    public static decodeEntities(encodedString: string) {
+        const regex = /&(nbsp|amp|quot|lt|gt);/g
+        const translate = {
+            nbsp: " ",
+            amp : "&",
+            quot: "\"",
+            lt  : "<",
+            gt  : ">"
+        }
+        return encodedString.replace(regex, function(match, entity) {
+            return translate[entity]
+        }).replace(/&#(\d+);/gi, function(match, numStr) {
+            const num = parseInt(numStr, 10)
+            return String.fromCharCode(num)
+        })
+    }
+
+    public static formatDate(date: Date, yearFirst?: boolean) {
+        if (!date || Number.isNaN(date.getTime())) return ""
+        let year = date.getFullYear()
+        let month = (1 + date.getMonth()).toString()
+        let day = date.getDate().toString()
+        if (yearFirst) return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`
+        return `${month}-${day}-${year}`
     }
 }
