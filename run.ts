@@ -1,5 +1,5 @@
 import "dotenv/config"
-import runScript from "./scripts/21 - Fix unknown characters"
+import runScript from "./scripts/22 - Regenerate thumbnails"
 
 const start = async () => {
     runScript()
