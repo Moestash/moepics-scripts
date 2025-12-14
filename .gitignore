@@ -5,3 +5,8 @@ dist
 model
 dump
 conflicts.json
+ocr/comictextdetector.pt
+charactersplit/rtmdetl_e60.ckpt
+charactersplit/refine_last.ckpt
+tagger/model.onnx
+__pycache__

@@ -10,7 +10,7 @@ const regenerateThumbnails = async () => {
     let skip = 0
     for (const post of posts) {
         i++
-        if (Number(post.postID) > skip) break
+        if (Number(post.postID) < skip) break
         const result = await moepics.posts.regenerateThumbnails(post.postID)
         console.log(`${post.postID} -> ${result}`)
     }

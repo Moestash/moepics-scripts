@@ -1,4 +1,4 @@
-import Moepictures from "moepics-api"
+import Moepictures, {Tag} from "moepics-api"
 import axios from "axios"
 import phash from "sharp-phash"
 import dist from "sharp-phash/distance"
@@ -6,6 +6,8 @@ import sharp from "sharp"
 import wanakana from "wanakana"
 import pinyin from "pinyin"
 import * as hangul from "hangul-romanization"
+import path from "path"
+import fs from "fs"
 
 const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
@@ -162,5 +164,51 @@ export default class Functions {
         let day = date.getDate().toString()
         if (yearFirst) return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`
         return `${month}-${day}-${year}`
+    }
+
+    public static dumpImage = async (imageBuffer: Buffer) => {
+        const folder = path.join(__dirname, "./dump")
+        if (!fs.existsSync(folder)) fs.mkdirSync(folder, {recursive: true})
+
+        const filename = `${Math.floor(Math.random() * 100000000)}.png`
+        const imagePath = path.join(folder, filename)
+        let pngBuffer = await sharp(imageBuffer).png().toBuffer()
+        fs.writeFileSync(imagePath, pngBuffer)
+        return imagePath
+    }
+
+    public static toProperCase = (str: string) => {
+        if (!str) return ""
+        return str.replace(/\w\S*/g, (txt) => {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+            }
+        )
+    }
+
+    public static tagStringCategories = (parsedTags: string[], tagMap: {[key: string]: Tag}) => {
+        let artists = [] as string[]
+        let characters = [] as string[]
+        let series = [] as string[]
+        let meta = [] as string[]
+        let tags = [] as string[] 
+        if (!parsedTags) return {artists, characters, series, meta, tags}
+        for (let i = 0; i < parsedTags.length; i++) {
+            let tag = parsedTags[i] as string
+            const foundTag = tagMap[tag]
+            if (foundTag) {
+                if (foundTag.type === "artist") {
+                    artists.push(tag)
+                } else if (foundTag.type === "character") {
+                    characters.push(tag)
+                } else if (foundTag.type === "series") {
+                    series.push(tag)
+                } else if (foundTag.type === "meta") {
+                    meta.push(tag)
+                } else {
+                    tags.push(tag)
+                }
+            }
+        }
+        return {artists, characters, series, meta, tags}
     }
 }
