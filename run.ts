@@ -1,5 +1,5 @@
 import "dotenv/config"
-import runScript from "./scripts/23 - Generate ocr notes"
+import runScript from "./scripts/24 - Generate character notes"
 
 const start = async () => {
     runScript()

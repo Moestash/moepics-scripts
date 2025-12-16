@@ -5,11 +5,11 @@ import path from "path"
 const retagBadPosts = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
-    const posts = await moepics.search.posts({query: "-autotags", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "-autotags", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
     console.log(posts.length)
   
     let i = 0
-    let skip = 17534
+    let skip = 0
     for (const post of posts) {
         i++
         if (Number(post.postID) < skip) continue
@@ -58,6 +58,12 @@ const retagBadPosts = async () => {
             if (!exists) await moepics.tags.insert(item.tag, "series", "Series.")
         }
 
+        // This check can be skipped for speed, but sometimes needed
+        for (const tag of tagLookup.tags) {
+            const exists = await moepics.tags.get(tag!)
+            if (!exists) await moepics.tags.insert(tag, "tag", functions.toProperCase(tag.replaceAll("-", " ")) + ".")
+        }
+
         let appendTags = functions.removeDuplicates([
             ...tagLookup.artists.map((t) => t.tag),
             ...tagLookup.characters.map((t) => t.tag),
@@ -66,8 +72,7 @@ const retagBadPosts = async () => {
             ...tagLookup.tags
         ].filter(Boolean)) as string[]
 
-        // Most of these posts just need to append tags (remove any that already exist first)
-        await moepics.posts.removeTags(post.postID, appendTags)
+        // Most of these posts just need to append tags
         await moepics.posts.addTags(post.postID, appendTags)
     }
 }

@@ -81,7 +81,7 @@ def split_into_chunks(img, mask_refined, block, line_index, textheight=64, max_r
 def ocr_image(img_path):
     text_detector = TextDetector(model_path=os.path.join(dirname, "comictextdetector.pt"), input_size=1024, device=device, act="leaky")
     manga_ocr = MangaOcr()
-    translator = Translator(to_lang="en", from_lang="ja")
+    translator = Translator(provider="deepl", secret_access_key=os.getenv("DEEPL_KEY"), to_lang="en", from_lang="ja")
     img = cv2.imdecode(np.fromfile(img_path, dtype=np.uint8), cv2.IMREAD_COLOR)
     height, width, channels = img.shape
     result = []

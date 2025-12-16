@@ -11,7 +11,7 @@ const fixUnknownArtists = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
     const pixiv = await Pixiv.refreshLogin(process.env.PIXIV_REFRESH_TOKEN!)
 
-    const posts = await moepics.search.posts({query: "unknown-artist", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "unknown-artist", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
     console.log(posts.length)
 
     let i = 0

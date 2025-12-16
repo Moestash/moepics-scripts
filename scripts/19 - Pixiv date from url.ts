@@ -10,7 +10,7 @@ const parseDate = (pximgLink: string) => {
 
 const updateBadDates = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
-    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
     const noDate = posts.filter((p) => !p.posted)
     console.log(noDate.length)
 
@@ -38,7 +38,7 @@ const isLater = (a: string, b: string) => {
 
 const fixInvalidDates = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
-    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
 
     let i = 0
     let skip = 0

@@ -34,7 +34,7 @@ const parseTwitterLink = async (html: string, originalLink: string) => {
 export const updateTwitterMirrors = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
-    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
 
     const {page, browser} = await connect({headless: false, turnstile: true})
     let first = true
@@ -45,7 +45,7 @@ export const updateTwitterMirrors = async () => {
         if (post.source?.includes("twitter.com")) continue
         if (post.mirrors?.twitter) continue
 
-        let publicBucket = post.rating === "hentai" ? process.env.MOEPICTURES_PUBLIC_BUCKET_R18 : process.env.MOEPICTURES_PUBLIC_BUCKET
+        let publicBucket = post.rating === "lewd" ? process.env.MOEPICTURES_PUBLIC_BUCKET_R18 : process.env.MOEPICTURES_PUBLIC_BUCKET
 
         const image = post.images[0]
         const directLink = `${publicBucket}/${image.type}/${image.postID}-${image.order}-${encodeURIComponent(image.filename)}`

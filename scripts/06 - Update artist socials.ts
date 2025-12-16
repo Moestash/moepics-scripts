@@ -16,7 +16,7 @@ const updateArtistSocials = async () => {
         // Comment this line to reprocess all artists
         if (tag.image && tag.social) continue
 
-        const posts = await moepics.search.posts({query: tag.tag, type: "all", rating: "all+h", style: "all+s"})
+        const posts = await moepics.search.posts({query: tag.tag, type: "all", rating: "all+l", style: "all+s"})
         if (!posts.length) continue
         const source = posts.find((p) => p.source?.includes("pixiv.net"))?.source
         if (!source) continue

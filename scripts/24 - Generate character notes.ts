@@ -43,11 +43,12 @@ const defaultNoteData = {
     strokeWidth: 0,
     breakWord: true,
     borderRadius: 0,
+    rotation: 0,
     character: false,
     characterTag: ""
 }
 
-const processData = async (data: RawEntry[], tags: string[]) => {
+const processData = async (data: RawEntry[], tags: string[], characters: string[], imageHash: string) => {
     let characterNotes = [] as Note[]
     let tagGroups = [] as TagGroup[]
     const tagGroupTags: Set<string> = new Set()
@@ -57,6 +58,8 @@ const processData = async (data: RawEntry[], tags: string[]) => {
         let filteredTags = entry.tags.split(" ").filter(tag => !entry.characterTags.includes(tag)).join(" ")
         let tags = await moepics.misc.moepicsTags(filteredTags).then((r) => r.tags.split(/\s+/))
         let characterTags = await moepics.misc.moepicsTags(entry.characterTags.join(" ")).then((r) => r.tags.split(/\s+/))
+        characterTags = characterTags.filter((c) => c !== "unknown-artist")
+        if (!characterTags.length) characterTags = characters
         cleaned.push({...entry, tags, characterTags})
     }
 
@@ -69,6 +72,10 @@ const processData = async (data: RawEntry[], tags: string[]) => {
 
     for (const entry of cleaned) {
         let characterTag = entry.characterTags[0]
+        if (!characterTag) characterTag = "unknown-character"
+        const characterExists = await moepics.tags.get(characterTag)
+        if (!characterExists) await moepics.tags.insert(characterTag, "character", "Character.")
+
         let note = {...defaultNoteData} as Note
         note.imageWidth = entry.imageWidth
         note.imageHeight = entry.imageHeight
@@ -76,11 +83,20 @@ const processData = async (data: RawEntry[], tags: string[]) => {
         note.y = entry.y
         note.width = entry.width
         note.height = entry.height
+        note.imageHash = imageHash
         note.character = true
         note.characterTag = characterTag
         characterNotes.push(note)
 
         let name = functions.toProperCase(characterTag.split("-")[0])
+        let baseName = name.replace(/\d+$/, "")
+        let exists = tagGroups.find((g) => g.name === name)
+        let i = 2
+        while (exists) {
+            name = `${baseName}${i}`
+            exists = tagGroups.find((g) => g.name === name)
+            i++
+        }
         let groupTags = entry.tags.filter((tag) => tags.includes(tag))
         tagGroups.push({name, tags: groupTags})
         groupTags.forEach((tag) => tagGroupTags.add(tag))
@@ -93,9 +109,7 @@ const processData = async (data: RawEntry[], tags: string[]) => {
 }
 
 const generateCharacterNotes = async () => {
-    const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
-
-    const posts = await moepics.search.posts({query: "multiple-characters -translated -taggroupcheck", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "multiple-characters -translated -tag-groups", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
     const tags = await moepics.tags.list([])
     let tagMap = {} as {[key: string]: Tag}
     for (const tag of tags) {
@@ -104,7 +118,7 @@ const generateCharacterNotes = async () => {
     console.log(posts.length)
   
     let i = 0
-    let skip = 0
+    let skip = 18836
     for (const post of posts) {
         i++
         if (Number(post.postID) < skip) continue
@@ -117,6 +131,7 @@ const generateCharacterNotes = async () => {
             console.log(`${i} -> ${post.postID} / ${image.order}`)
             let imageLink = moepics.links.getImageLink(image, false)
             const buffer = await moepics.api.fetch(imageLink).then((r) => r.arrayBuffer())
+            const imageHash = await functions.pHash(Buffer.from(buffer))
 
             let imagePath = await functions.dumpImage(Buffer.from(buffer))
             const scriptPath = path.join(__dirname, "../../charactersplit/charactersplit.py")
@@ -125,7 +140,7 @@ const generateCharacterNotes = async () => {
             fs.unlinkSync(imagePath)
 
             const data = JSON.parse(str.match(/(?<=>>>JSON<<<)([\s\S]*?)(?=>>>ENDJSON<<<)/gm)?.[0])
-            let processed = await processData(data, tagInfo.tags)
+            let processed = await processData(data, tagInfo.tags, tagInfo.characters, imageHash)
 
             if (processed.tagGroups.length) {
                 if (!tagGroups.length) tagGroups = processed.tagGroups

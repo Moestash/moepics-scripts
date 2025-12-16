@@ -11,8 +11,8 @@ const hideCertainArtists = async () => {
     for (const tag of tags) {
         i++
         if (i < skip) continue
-        const posts = await moepics.search.posts({query: tag.tag, type: "all", rating: "all+h", style: "all+s", sort: "reverse date", limit: 999999})
-        const r18 = posts.filter((p) => p.rating === "hentai")
+        const posts = await moepics.search.posts({query: tag.tag, type: "all", rating: "all+l", style: "all+s", sort: "reverse date", limit: 999999})
+        const r18 = posts.filter((p) => p.rating === "lewd")
         const ratio = r18.length / posts.length * 100
         console.log(`${i}: ${tag.tag} -> ${ratio}`)
         if (ratio >= 90) {

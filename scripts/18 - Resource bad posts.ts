@@ -126,7 +126,7 @@ const updateSource = async (post: PostSearch, pixivID?: string, pixivOnly?: bool
 }
 
 const resourceBadPosts = async () => {
-    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
     const unsourced = posts.filter((p) => !p.source)
     console.log(unsourced.length)
 
@@ -153,7 +153,7 @@ const resourceBadPosts = async () => {
 }
 
 const resourceBadPostsFromRef = async () => {
-    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
     const unsourced = posts.filter((p) => !p.source)
     console.log(unsourced.length)
 
@@ -193,7 +193,7 @@ const resourceBadPostsFromRef = async () => {
 }
 
 const updateBadPixivPosts = async () => {
-    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+h", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
     const badSource = posts.filter((p) => !p.posted)
     console.log(badSource.length)
 

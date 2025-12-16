@@ -46,7 +46,11 @@ def character_results(img: np.ndarray, instances: AnimeInstances):
     img_height, img_width = img.shape[:2]
     result = []
 
-    for i, (bbox, tags, character_tags) in enumerate(zip(instances.bboxes, instances.tags, instances.character_tags)):
+    bboxes = instances.bboxes if instances.bboxes is not None else []
+    tags_list = instances.tags if instances.tags is not None else [None] * len(bboxes)
+    characters_list = instances.character_tags if instances.character_tags is not None else [None] * len(bboxes)
+
+    for i, (bbox, tags, character_tags) in enumerate(zip(bboxes, tags_list, characters_list)):
         x1, y1, w, h = bbox
         result_block = {
             "imageWidth": img_width,
@@ -55,8 +59,8 @@ def character_results(img: np.ndarray, instances: AnimeInstances):
             "y": float(y1),
             "width": float(w),
             "height": float(h),
-            "tags": tags,
-            "characterTags": character_tags
+            "tags": tags or "",
+            "characterTags": character_tags or []
         }
         result.append(result_block)
 
