@@ -59,12 +59,12 @@ const processData = (data: RawEntry[], imageHash: string) => {
 const generateOCRNotes = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
-    //const posts = await moepics.search.posts({query: "+untranslated +partially-translated", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
-    const posts = await moepics.search.posts({query: "-translated", type: "comic", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
+    //const posts = await moepics.search.posts({query: "+untranslated +partially-translated", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 99999})
+    const posts = await moepics.search.posts({query: "-translated", type: "comic", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 99999})
     console.log(posts.length)
   
     let i = 0
-    let skip = 54465 // comic / 54366 image
+    let skip = 54366
     for (const post of posts) {
         i++
         if (Number(post.postID) < skip) continue

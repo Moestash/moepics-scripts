@@ -5,7 +5,7 @@ const addUserProfileLinks = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
     const pixiv = await Pixiv.refreshLogin(process.env.PIXIV_REFRESH_TOKEN!)
 
-    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 99999})
   
     let i = 0
     let skip = 0
@@ -23,6 +23,8 @@ const addUserProfileLinks = async () => {
                 if (String(e)?.includes("access_token")) return console.log("429")
                 continue
             }
+            const pixivTags = illust.tags.map((t) => t.name)
+            await moepics.posts.update(post.postID, "pixivTags", pixivTags)
             let userLink = `https://www.pixiv.net/users/${illust.user.id}`
             await moepics.posts.update(post.postID, "userProfile", userLink)
             await moepics.posts.update(post.postID, "drawingTools", illust.tools)

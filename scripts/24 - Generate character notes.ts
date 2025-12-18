@@ -109,7 +109,7 @@ const processData = async (data: RawEntry[], tags: string[], characters: string[
 }
 
 const generateCharacterNotes = async () => {
-    const posts = await moepics.search.posts({query: "multiple-characters -translated -tag-groups", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "multiple-characters -translated -tag-groups", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 99999})
     const tags = await moepics.tags.list([])
     let tagMap = {} as {[key: string]: Tag}
     for (const tag of tags) {
@@ -118,7 +118,7 @@ const generateCharacterNotes = async () => {
     console.log(posts.length)
   
     let i = 0
-    let skip = 18836
+    let skip = 54793
     for (const post of posts) {
         i++
         if (Number(post.postID) < skip) continue

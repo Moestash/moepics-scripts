@@ -4,7 +4,7 @@ import functions from "../functions/Functions"
 const fixUnknownCharacters = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
-    const posts = await moepics.search.posts({query: "solo +unknown-character +unknown-series", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "solo +unknown-character +unknown-series", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 99999})
     const tags = await moepics.tags.list([])
     let tagMap = {} as {[key: string]: Tag}
     for (const tag of tags) {
@@ -63,7 +63,7 @@ const fixUnknownCharacters = async () => {
 const fixUnknownCharactersDanbooru = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
-    const posts = await moepics.search.posts({query: "+unknown-character +unknown-series", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "+unknown-character +unknown-series", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 99999})
     const tags = await moepics.tags.list([])
     let tagMap = {} as {[key: string]: Tag}
     for (const tag of tags) {

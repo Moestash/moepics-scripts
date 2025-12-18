@@ -16,7 +16,7 @@ const findArtistConflicts = async () => {
     for (const tag of tags) {
         i++
         if (i < skip) continue
-        const posts = await moepics.search.posts({query: tag.tag, type: "all", rating: "all+l", style: "all+s", sort: "reverse date", limit: 999999})
+        const posts = await moepics.search.posts({query: tag.tag, type: "all", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 999999})
         let uniqueUsers = functions.removeDuplicates(posts.filter((p) => p.userProfile).map((p) => p.userProfile)) as string[]
 
         if (uniqueUsers.length > 1) {
@@ -74,7 +74,7 @@ const fixArtistConflicts = async () => {
     for (const tag of conflicts) {
         if (tag === "unknown-artist") continue
 
-        const posts = await moepics.search.posts({query: tag, type: "all", rating: "all+l", style: "all+s", sort: "reverse date", limit: 999999})
+        const posts = await moepics.search.posts({query: tag, type: "all", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 999999})
         let uniqueUsers = functions.removeDuplicates(posts.filter((p) => p.userProfile).map((p) => p.userProfile)) as string[]
         if (uniqueUsers.length <= 1) continue
 

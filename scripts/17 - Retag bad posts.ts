@@ -5,7 +5,7 @@ import path from "path"
 const retagBadPosts = async () => {
     const moepics = new Moepictures(process.env.MOEPICTURES_API_KEY!)
 
-    const posts = await moepics.search.posts({query: "-autotags", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", limit: 99999})
+    const posts = await moepics.search.posts({query: "-autotags", type: "image", rating: "all+l", style: "all+s", sort: "reverse date", showChildren: true, limit: 99999})
     console.log(posts.length)
   
     let i = 0
